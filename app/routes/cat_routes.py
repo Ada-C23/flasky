@@ -39,3 +39,16 @@ def delete_cat(id):
     db.session.delete(cat)
     db.session.commit()
     return Response(status=204, mimetype="application/json")
+
+@bp.patch("/<cat_id>/pet")
+def pet_cat(cat_id):
+    cat = validate_model(Cat, cat_id)
+
+    if cat.pet_count is None:
+        cat.pet_count = 1
+    else:
+        cat.pet_count += 1
+    
+    db.session.commit()
+
+    return cat.to_dict()
